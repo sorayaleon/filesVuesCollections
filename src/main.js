@@ -9,8 +9,13 @@ require('./assets/main.scss');
 
 Vue.config.productionTip = false;
 
-new Vue({
-  router,
-  store,
-  render: (h) => h(App),
-}).$mount('#app');
+var app;
+fb.auth.onAuthStateChanged(() => {
+  if(!app) {
+    new Vue({
+      router,
+      store,
+      render: (h) => h(App),
+    }).$mount('#app');
+  }
+});
