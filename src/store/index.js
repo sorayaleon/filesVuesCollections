@@ -19,15 +19,19 @@ fb.auth.onAuthStateChanged(user => {
   },
   mutations: {
     setUser (state, value){
-
+      state.user = value;
     },
     setProfile (state, value){
-
+      state.profile = value;
     },
   },
   actions: {
     getUserProfile ({commit, state}){
-
+      fb.usersCollection.doc(state.user.uid).get().then(res => {
+        commit('setProfile', res.data());
+      }).catch(error => {
+        console.error(error);
+      });
     },
   },
   modules: {
