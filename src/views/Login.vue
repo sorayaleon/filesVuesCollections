@@ -44,7 +44,7 @@
 </template>
 
 <script>
-    const fb = require('../firebase');
+    const fb = require('../firebase.js');
     export default {
         name: "Login",
         data(){

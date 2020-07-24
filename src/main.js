@@ -3,7 +3,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 
-const fb = require('./firebase');
+const fb = require('./firebase.js');
 
 require('./assets/main.scss');
 

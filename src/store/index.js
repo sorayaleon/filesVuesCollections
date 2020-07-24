@@ -33,6 +33,10 @@ fb.auth.onAuthStateChanged(user => {
         console.error(error);
       });
     },
+    clear({commit}){
+      commit('setUser', null);
+      commit('setProfile',{});
+    }
   },
   modules: {
   },
