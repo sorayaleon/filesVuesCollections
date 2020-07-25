@@ -40,7 +40,7 @@
             </div>
             <div class="field">
               <p class="control">
-                <button class="button is-info">
+                <button class="button is-info" :class="{'is-loading': working}">
                   Register
                 </button>
               </p>
@@ -49,7 +49,7 @@
           <hr>
           <ul>
             <li>
-              <router-link to="/reset-password">Reset password</router-link>
+              <router-link to="recover">Reset password</router-link>
             </li>
           </ul>
         </div>
@@ -70,10 +70,12 @@
             surname: '',
             mail: '',
             pass: '',
+            working: false,
           }
         },
         methods: {
           register() {
+            this.working = true;
             fb.auth.createUserWithEmailAndPassword(this.mail, this.pass).then(user => {
               this.$store.commit('setUser', user.user);
               fb.usersCollection.doc(user.user.uid).set({
@@ -88,7 +90,7 @@
               });
             }).catch(error => {
               console.error(error);
-            });
+            }).finally(() => this.working = false);
           }
         }
     }

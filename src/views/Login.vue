@@ -51,17 +51,19 @@
             return {
                 mail: '',
                 pass: '',
+                working: false,
             };
         },
         methods:{
             login(){
+              this.working = true;
               fb.auth.signInWithEmailAndPassword(this.mail, this.pass).then(user => {
                 this.$store.commit('setUser', user.user);
                 this.$store.dispatch('getUserProfile');
                 this.$router.push('/');
               }).catch(error => {
                 console.error(error);
-              })
+              }).finally(() => this.working = false);
             }
         },
     };
