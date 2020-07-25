@@ -30,11 +30,11 @@
               </p>
             </div>
           </form>
-
+          <Error v-if="messageError" :message="messageError"></Error>
           <hr>
           <ul>
             <li>
-              <router-link to="/reset-password">Reset Password</router-link>
+              <router-link to="/recover">Reset Password</router-link>
             </li>
           </ul>
         </div>
@@ -45,6 +45,7 @@
 
 <script>
     const fb = require('../firebase.js');
+    import Error from '../components/Error';
     export default {
         name: "Login",
         data(){
@@ -52,20 +53,26 @@
                 mail: '',
                 pass: '',
                 working: false,
-            };
+                messageError: '',
+            }
         },
         methods:{
             login(){
               this.working = true;
+              this.messageError = '';
               fb.auth.signInWithEmailAndPassword(this.mail, this.pass).then(user => {
                 this.$store.commit('setUser', user.user);
                 this.$store.dispatch('getUserProfile');
                 this.$router.push('/');
               }).catch(error => {
                 console.error(error);
+                this.messageError = error.message;
               }).finally(() => this.working = false);
             }
         },
+        components:{
+            Error,
+        }
     };
 </script>
 

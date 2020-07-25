@@ -23,6 +23,10 @@
               </p>
             </div>
           </form>
+
+          <Error v-if="messageError" :message="messageError"></Error>
+          <Success @closeMessage="messageSuccess = ''" v-if="messageSuccess" :message="messageSuccess"></Success>
+
         </div>
       </div>
     </div>
@@ -31,23 +35,28 @@
 
 <script>
     const fb = require('../firebase.js');
+    import Error from '../components/Error';
+    import Success from "../components/Success";
     export default {
         name: "Recover",
         data(){
             return{
               mail: '',
               working: false,
+              messageError: '',
+              messageSuccess: '',
             }
         },
         methods: {
           recover() {
             this.working = true;
+            this.messageSuccess = this.messageError = '';
             fb.auth.sendPasswordResetEmail(this.mail).then(() => {
-              console.info('Success');
+              this.messageSuccess = 'Success. Please check your inbox';
               this.mail = '';
               this.redirect();
             }).catch(error => {
-              console.error(error);
+              this.messageError = error.message;
             }).finally(() => this.working = false);
           },
           redirect() {
@@ -56,6 +65,10 @@
               this.$router.push('/login');
             }, 2000);
           }
+        },
+        components: {
+          Error,
+          Success,
         }
     }
 </script>

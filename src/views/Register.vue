@@ -46,6 +46,9 @@
               </p>
             </div>
           </form>
+
+          <Error v-if="messageError" :message="messageError"></Error>
+
           <hr>
           <ul>
             <li>
@@ -62,6 +65,7 @@
 
 <script>
     const fb = require('../firebase.js');
+    import Error from '../components/Error';
     export default {
         name: "Register",
         data(){
@@ -71,11 +75,13 @@
             mail: '',
             pass: '',
             working: false,
+            messageError: ''
           }
         },
         methods: {
           register() {
             this.working = true;
+            this.messageError = '';
             fb.auth.createUserWithEmailAndPassword(this.mail, this.pass).then(user => {
               this.$store.commit('setUser', user.user);
               fb.usersCollection.doc(user.user.uid).set({
@@ -87,11 +93,16 @@
                 this.$router.push('/');
               }).catch(error => {
                 console.error(error);
+                this.messageError = error.message;
               });
             }).catch(error => {
               console.error(error);
+              this.messageError = error.message;
             }).finally(() => this.working = false);
           }
+        },
+        components: {
+          Error,
         }
     }
 </script>
