@@ -5,7 +5,7 @@ const config = {
   apiKey: "AIzaSyDjldXjDe5eVTdF2w4iyCe61M0uMsy7g-M",
   authDomain: "filesvuescollections.firebaseapp.com",
   databaseURL: "https://filesvuescollections.firebaseio.com",
-  projectId: "filesvuescollections",
+  projectId: "files-vues-collections",
   storageBucket: "",
   messagingSenderId: "218458213344",
   appId: "1:218458213344:web:b6e1d08586ccd8867cf985",

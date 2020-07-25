@@ -21,10 +21,10 @@
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <router-link class="button is-primary" to="/register">Register</router-link>
-            <router-link class="button is-light" to="/login">Login</router-link>
-            <router-link class="button is-light" to="/profile">Profile</router-link>
-            <a class="button is-ligth" href="#">Logout</a>
+            <router-link v-if="!user" class="button is-primary" to="/register">Register</router-link>
+            <router-link v-if="!user" class="button is-light" to="/login">Login</router-link>
+            <router-link v-if="user" class="button is-light" to="/profile">Profile</router-link>
+            <a v-if="user" @click="logout" class="button is-ligth" href="#">Logout</a>
           </div>
         </div>
       </div>
@@ -33,14 +33,31 @@
 </template>
 
 <script>
-import { bulmaHeader } from '../assets/utils';
+  const fb = require('../firebase.js');
+  import { bulmaHeader } from '../assets/utils';
+  import { mapState } from 'vuex';
 
-export default {
-  name: 'Navigation',
-  mounted() {
-    bulmaHeader();
-  },
-};
+  export default {
+    name: 'Navigation',
+    mounted() {
+      bulmaHeader();
+    },
+    methods: {
+      logout() {
+        fb.auth.signOut().then(() => {
+          if(this.$route.fullPath != '/') {
+            this.$router.push('/');
+          }
+          this.$store.dispatch('clear');
+        }).catch(error => {
+          console.error(error);
+        })
+      }
+    },
+    computed: {
+      ...mapState(['user']),
+    }
+  };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
