@@ -26,14 +26,14 @@ fb.auth.onAuthStateChanged(user => {
         if(!store.state.otherResources.some(other => other.id === resource.id)){
           store.commit('setOther', resource);
         }
+    }else {
+      querySnapshot.forEach(doc => {
+        let resource = doc.data();
+        resource.id = doc.id;
+        resources.push(resource);
+      });
+      store.commit('setResources', resources);
     }
-
-    querySnapshot.forEach(doc => {
-      let resource = doc.data();
-      resource.id = doc.id;
-      resources.push(resource);
-    });
-    store.commit('setResources', resources);
   });
 });
 
@@ -42,7 +42,7 @@ fb.auth.onAuthStateChanged(user => {
     user: null,
     profile: {},
     resources: [],
-    otherResources: '',
+    otherResources: [],
   },
   mutations: {
     setUser (state, value){
@@ -56,6 +56,9 @@ fb.auth.onAuthStateChanged(user => {
     },
     setOther (state, value) {
       state.otherResources.unshift(value);
+    },
+    clearOthers(state){
+      state.otherResources = [];
     }
   },
   actions: {

@@ -6,6 +6,12 @@
 
       <div class="columns" id="home">
         <div class="column is-half-tablet">
+          <transition name="fade">
+            <div @click="showOthers" v-if="otherResources.length" class="notification is-info" id="new-notice">
+              <p>{{ otherResources.length }} new resources have been added.</p>
+              <a>Click to see them.</a>
+            </div>
+          </transition>
           <ResourcePreview :key="resource.id" @del="del" v-for="resource in resources" :data="resource"></ResourcePreview>
         </div>
 
@@ -100,6 +106,10 @@
       clear() {
         this.title = this.description = this.url = '';
       },
+      showOthers(){
+        this.$store.commit('setResources', this.otherResources.concat(this.resources));
+        this.$store.commit('clearOthers');
+      }
     },
     computed:{
       ...mapState(['user', 'profile', 'resources', "otherResources"]),
@@ -113,6 +123,21 @@
 </script>
 
 <style scoped>
+  #new-notice {
+    animation: jump 0.5s;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+  }
+
+  .top a {
+    color: inherit;
+  }
+
+  @keyframes jump {
+    from { transform: translateY(0); }
+    to   { transform: translateY(10px); }
+  }
+
   @media screen and (max-width: 768px) {
     #home {
       display: flex;
