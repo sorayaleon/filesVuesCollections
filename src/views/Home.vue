@@ -9,6 +9,8 @@
           <ResourcePreview :key="resource.id" @del="del" v-for="resource in resources" :data="resource"></ResourcePreview>
         </div>
 
+        <h1 class="has-text-centered" v-if="!resources.length">Resources not found.</h1>
+
         <div class="column is-offset-1">
           <section class="section has-background-light">
             <form @submit.prevent="add">
@@ -100,7 +102,7 @@
       },
     },
     computed:{
-      ...mapState(['user', 'profile', 'resources']),
+      ...mapState(['user', 'profile', 'resources', "otherResources"]),
     },
     components: {
       Success,

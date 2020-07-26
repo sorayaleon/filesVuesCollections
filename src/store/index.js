@@ -12,7 +12,22 @@ fb.auth.onAuthStateChanged(user => {
   }
 
   fb.resourcesCollection.orderBy('when', 'desc').onSnapshot(querySnapshot => {
+    let self = false;
     let resources = [];
+
+    if(store.state.user && querySnapshot.docs.length){
+      self = (store.state.user.uid === querySnapshot.docChanges()[0].doc.data().userId);
+    }
+
+    if (querySnapshot.docChanges().length !== querySnapshot.docs.length && querySnapshot.docChanges()[0].type == 'added' && !self){
+        let resource = querySnapshot.docChanges()[0].doc.data();
+        resource.id = querySnapshot.docChanges()[0].doc.id;
+
+        if(!store.state.otherResources.some(other => other.id === resource.id)){
+          store.commit('setOther', resource);
+        }
+    }
+
     querySnapshot.forEach(doc => {
       let resource = doc.data();
       resource.id = doc.id;
@@ -27,6 +42,7 @@ fb.auth.onAuthStateChanged(user => {
     user: null,
     profile: {},
     resources: [],
+    otherResources: '',
   },
   mutations: {
     setUser (state, value){
@@ -37,6 +53,9 @@ fb.auth.onAuthStateChanged(user => {
     },
     setResources (state, value) {
       state.resources = value;
+    },
+    setOther (state, value) {
+      state.otherResources.unshift(value);
     }
   },
   actions: {
