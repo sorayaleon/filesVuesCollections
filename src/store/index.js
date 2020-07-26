@@ -10,12 +10,23 @@ fb.auth.onAuthStateChanged(user => {
     store.commit('setUser', user);
     store.dispatch('getUserProfile');
   }
-})
+
+  fb.resourcesCollection.orderBy('when', 'desc').onSnapshot(querySnapshot => {
+    let resources = [];
+    querySnapshot.forEach(doc => {
+      let resource = doc.data();
+      resource.id = doc.id;
+      resources.push(resource);
+    });
+    store.commit('setResources', resources);
+  });
+});
 
  const store = new Vuex.Store({
   state: {
     user: null,
     profile: {},
+    resources: [],
   },
   mutations: {
     setUser (state, value){
@@ -24,6 +35,9 @@ fb.auth.onAuthStateChanged(user => {
     setProfile (state, value){
       state.profile = value;
     },
+    setResources (state, value) {
+      state.resources = value;
+    }
   },
   actions: {
     getUserProfile ({commit, state}){

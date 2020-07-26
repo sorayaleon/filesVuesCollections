@@ -6,40 +6,7 @@
 
       <div class="columns" id="home">
         <div class="column is-half-tablet">
-          <div class="box">
-            <article class="media">
-              <div class="media-content">
-                <div class="content">
-                  <button class="delete is-small is-pulled-right" aria-label="delete"></button>
-                  <p>
-                    <b>Title</b>
-                    <br>
-                    Description
-                    <br>
-                    <small>User</small>
-                    <small> <i> (A moment ago...)</i> </small>
-                  </p>
-                </div>
-                <nav class="level is-pulled-left">
-                  <div class="level-left">
-                    <a class="level-item" aria-label="reply">
-                      <a href="#" class="button is-link is-small">Go</a>
-                    </a>
-                    <a class="level-item">
-                      <a href="#" target="_blank" class="button is-primary is-small">More info</a>
-                    </a>
-                  </div>
-                </nav>
-                <nav class="level is-pulled-right">
-                  <div class="level-right">
-                    <a href="#" class="level-item" aria-label="reply">1 Comment</a>
-                    <a href="#" class="level-item">3 Votes</a>
-                  </div>
-                </nav>
-              </div>
-            </article>
-          </div>
-
+          <ResourcePreview :key="resource.id" @del="del" v-for="resource in resources" :data="resource"></ResourcePreview>
         </div>
 
         <div class="column is-offset-1">
@@ -86,6 +53,7 @@
   const fb = require('../firebase.js');
   import Success from "../components/Success";
   import Error from "../components/Error";
+  import ResourcePreview from "../components/ResourcePreview";
   import { mapState } from 'vuex';
   export default {
     name: 'Home',
@@ -120,16 +88,24 @@
           this.messageError(error.message);
         }).finally(() => this.working = false);
       },
+     del(id){
+       this.messageError = '';
+       fb.resourcesCollection.doc(id).delete().catch(error => {
+         console.error(error);
+         this.messageError = error.message;
+       });
+     } ,
       clear() {
         this.title = this.description = this.url = '';
       },
     },
     computed:{
-      ...mapState(['user', 'profile']),
+      ...mapState(['user', 'profile', 'resources']),
     },
     components: {
       Success,
       Error,
+      ResourcePreview,
     },
   };
 </script>
