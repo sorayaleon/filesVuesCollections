@@ -102,7 +102,12 @@
       },
       props: ['id'],
       computed: {
-        ...mapState(['user', 'resources', 'profile'])
+        ...mapState(['user', 'resources', 'profile', 'comments']),
+        localComment() {
+          return this.comments.filter(comment => {
+            return comment.resourceId === this.id;
+          });
+        }
       },
       methods: {
           vote() {

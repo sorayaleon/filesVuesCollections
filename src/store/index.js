@@ -11,6 +11,16 @@ fb.auth.onAuthStateChanged(user => {
     store.dispatch('getUserProfile');
   }
 
+  fb.commentCollection.orderBy('when', 'desc').onSnapshot(querySnapshot => {
+    let comments = [];
+    querySnapshot.forEach(doc => {
+      let comment = doc.data();
+      comment.id = doc.id;
+      comments.push(comment);
+    });
+    store.commit('setComments', comments);
+  });
+
   fb.resourcesCollection.orderBy('when', 'desc').onSnapshot(querySnapshot => {
     let self = false;
     let resources = [];
@@ -43,6 +53,7 @@ fb.auth.onAuthStateChanged(user => {
     profile: {},
     resources: [],
     otherResources: [],
+    comments: [],
   },
   mutations: {
     setUser (state, value){
@@ -53,6 +64,9 @@ fb.auth.onAuthStateChanged(user => {
     },
     setResources (state, value) {
       state.resources = value;
+    },
+    setComments (state, value) {
+      state.comments = value;
     },
     setOther (state, value) {
       state.otherResources.unshift(value);
