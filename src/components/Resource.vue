@@ -58,7 +58,11 @@
 
       </section>
       <footer class="modal-card-foot">
-        <button class="button is-danger">Votar recurso</button>
+        <span v-if="!user">
+          <router-link to="/register">Register</router-link> to vote.
+        </span>
+        <span v-else-if="voted">The vote has been recorded.</span>
+        <button v-else @click="vote" class="button is-danger" :class="{'is-loading': working}">Votar recurso</button>
       </footer>
     </div>
   </div>
@@ -67,22 +71,55 @@
 <script>
     import { mapState } from 'vuex';
     import moment from 'moment';
+    const fb = require('../firebase');
     export default {
-        name: "Resource",
+      name: "Resource",
       created() {
           this.index = this.resources.findIndex(resource => resource.id === this.id);
           this.resource = this.resources[this.index];
+
+          if(this.user){
+            let voteId = this.user.uid + '_' + this.resource.id;
+            fb.votesCollection.doc(voteId).get().then(doc => {
+              if (!doc.exists) {
+                this.voted = false;
+              }
+            });
+          }
       },
       data() {
         return {
           index: null,
           resource: {},
           comment: '',
+          working: false,
+          voted: true,
         }
       },
       props: ['id'],
       computed: {
         ...mapState(['user', 'resources', 'profile'])
+      },
+      methods: {
+          vote() {
+            this.working = true;
+
+            let voteId = this.user.uid + '_' + this.resource.id;
+            fb.votesCollection.doc(voteId).set({
+              resourceId: this.resource.id,
+              userId: this.user.uid,
+            }).then( () => {
+              fb.resourcesCollection.doc(this.resource.id).update({
+                votes: this.resource.votes + 1
+              }).then( () => {
+                this.voted = true;
+              }).catch(error => {
+                console.log(error);
+              }).catch(error => {
+                console.log(error);
+              })
+            }).finally( () => this.working = false);
+          }
       },
       filters: {
         since(value) {
