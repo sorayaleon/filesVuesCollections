@@ -18,7 +18,7 @@
 
         <!-- comments -->
         <h2 class="subtitle">comments</h2>
-        <form @submit.prevent="commentt">
+        <form @submit.prevent="commenttt">
           <div class="field">
             <div class="control">
               <textarea v-model.trim="comment" class="textarea" placeholder="Textarea" required></textarea>
@@ -37,7 +37,7 @@
         </form>
 
         <Error v-show="messageError" :mensaje="messageError"></Error>
-        <Exito @close="messageSuccess = ''" v-show="messageSuccess" :mensaje="messageSuccess"></Exito>
+        <Success @closeMessage="messageSuccess = ''" v-show="messageSuccess" :message="messageSuccess"></Success>
 
         <br>
         <template v-for="comment in localComment">
@@ -71,6 +71,8 @@
 <script>
     import { mapState } from 'vuex';
     import moment from 'moment';
+    import Success from "../components/Success";
+    import Error from "../components/Error";
     const fb = require('../firebase');
     export default {
       name: "Resource",
@@ -94,6 +96,8 @@
           comment: '',
           working: false,
           voted: true,
+          messageError: '',
+          messageSuccess: '',
         }
       },
       props: ['id'],
@@ -119,12 +123,41 @@
                 console.log(error);
               })
             }).finally( () => this.working = false);
+          },
+          commenttt() {
+            this.working = true;
+            this.messageSuccess = this.messageError = '';
+
+            fb.commentCollection.add({
+              when: new Date(),
+              comment: this.comment,
+              resourceId: this.id,
+              userId: this.user.uid,
+              name: this.profile.name,
+            }). then( () => {
+              fb.resourcesCollection.doc(this.id).update({
+                comment: this.resource.comment + 1,
+              }).then(() => {
+                this.messageSuccess = 'The comment has been successfully added.';
+                this.comment = '';
+              }).catch(error => {
+                console.error(error);
+                this.messageError = error.message;
+              });
+            }).catch(error => {
+              console.error(error);
+              this.messageError = error.message;
+            }).finally(() => this.working = false);
           }
       },
       filters: {
         since(value) {
           return moment(value.toDate()).fromNow();
         }
+      },
+      components: {
+        Success,
+        Error,
       }
     }
 </script>
