@@ -19,7 +19,7 @@
               <a :href="data.url" class="button is-link is-small">Go</a>
             </a>
             <a class="level-item">
-              <a href="#" target="_blank" class="button is-primary is-small">More info</a>
+              <a @click="$emit('visualize', true, data.id)" target="_blank" class="button is-primary is-small">More info</a>
             </a>
           </div>
         </nav>

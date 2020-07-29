@@ -1,5 +1,6 @@
 <template>
   <section class="section">
+    <Resource @visualize="visualize" v-if="visibleResource" :id="resourceId"></Resource>
     <div class="container">
       <h1 class="title has-text-centered">The best resources to master Vue.js</h1>
       <hr />
@@ -12,7 +13,7 @@
               <a>Click to see them.</a>
             </div>
           </transition>
-          <ResourcePreview :key="resource.id" @del="del" v-for="resource in resources" :data="resource"></ResourcePreview>
+          <ResourcePreview :key="resource.id" @visualize="visualize" @del="del" v-for="resource in resources" :data="resource"></ResourcePreview>
         </div>
 
         <h1 class="has-text-centered" v-if="!resources.length">Resources not found.</h1>
@@ -61,6 +62,7 @@
   const fb = require('../firebase.js');
   import Success from "../components/Success";
   import Error from "../components/Error";
+  import Resource from "../components/Resource";
   import ResourcePreview from "../components/ResourcePreview";
   import { mapState } from 'vuex';
   export default {
@@ -73,6 +75,8 @@
         working: false,
         messageError: '',
         messageSuccess: '',
+        resourceId: null,
+        visibleResource: false,
       }
     },
     methods:{
@@ -86,7 +90,7 @@
           description: this.description,
           userId: this.user.uid,
           name: this.profile.name,
-          comment: 0,
+          comments: 0,
           votes: 0,
         }).then(() =>{
           this.messageSuccess ='Successfully added resource.';
@@ -106,6 +110,12 @@
       clear() {
         this.title = this.description = this.url = '';
       },
+      visualize(status, id){
+        if(id){
+          this.resourceId = id;
+        }
+        this.visibleResource = status;
+      },
       showOthers(){
         this.$store.commit('setResources', this.otherResources.concat(this.resources));
         this.$store.commit('clearOthers');
@@ -118,6 +128,7 @@
       Success,
       Error,
       ResourcePreview,
+      Resource
     },
   };
 </script>
