@@ -21,6 +21,16 @@ fb.auth.onAuthStateChanged(user => {
     store.commit('setComments', comments);
   });
 
+  fb.resourcesCollection.orderBy('votes', 'desc').limit(5).onSnapshot(querySnapshot => {
+    let resources = [];
+    querySnapshot.forEach(doc => {
+      let resource = doc.data();
+      resource.id = doc.id;
+      resources.push(resource);
+    });
+    store.commit('setTopResources', resources);
+  });
+
   fb.resourcesCollection.orderBy('when', 'desc').onSnapshot(querySnapshot => {
     let self = false;
     let resources = [];
@@ -52,6 +62,7 @@ fb.auth.onAuthStateChanged(user => {
     user: null,
     profile: {},
     resources: [],
+    topResources: [],
     otherResources: [],
     comments: [],
   },
@@ -64,6 +75,9 @@ fb.auth.onAuthStateChanged(user => {
     },
     setResources (state, value) {
       state.resources = value;
+    },
+    setTopResources(state, value) {
+      state.topResources = value;
     },
     setComments (state, value) {
       state.comments = value;

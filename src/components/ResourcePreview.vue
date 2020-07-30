@@ -16,7 +16,7 @@
         <nav class="level is-pulled-left">
           <div class="level-left">
             <a class="level-item" aria-label="reply">
-              <a :href="data.url" class="button is-link is-small">Go</a>
+              <a :href="data.url" target="_blank" class="button is-link is-small">Go</a>
             </a>
             <a class="level-item">
               <a @click="$emit('visualize', true, data.id)" target="_blank" class="button is-primary is-small">More info</a>

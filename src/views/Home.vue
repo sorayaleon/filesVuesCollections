@@ -52,6 +52,26 @@
             <Error v-if="messageError" :message="messageError"></Error>
             <Success @closeMessage="messageSuccess = ''" v-if="messageSuccess" :message="messageSuccess"></Success>
           </section>
+
+          <section class="section">
+            <h2>Top resources</h2>
+            <hr>
+            <div v-for="top in topResources" :key="top.id" class="box">
+              <article class="media">
+                <div class="media-content">
+                  <div class="content top">
+                    <p>
+                      <a @click="visualize(true, top.id)">
+                        <strong>{{ top.title }}</strong>
+                        <br>
+                        <small>{{ top.votes }} votes</small>
+                      </a>
+                    </p>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </section>
         </div>
       </div>
     </div>
@@ -122,7 +142,7 @@
       }
     },
     computed:{
-      ...mapState(['user', 'profile', 'resources', "otherResources"]),
+      ...mapState(['user', 'profile', 'resources', 'otherResources', 'topResources']),
     },
     components: {
       Success,
