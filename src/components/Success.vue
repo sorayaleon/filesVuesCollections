@@ -1,6 +1,6 @@
 <template>
   <div class="notification is-success">
-    <button @click="semit('closeMessage')" class="delete"></button>
+    <button @click="$emit('closeMessage')" class="delete"></button>
     {{ message }}
   </div>
 </template>
