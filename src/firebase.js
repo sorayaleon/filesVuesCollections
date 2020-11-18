@@ -2,13 +2,13 @@ import firebase from "firebase";
 import 'firebase/firestore';
 
 const config = {
-  apiKey: "AIzaSyDjldXjDe5eVTdF2w4iyCe61M0uMsy7g-M",
-  authDomain: "filesvuescollections.firebaseapp.com",
-  databaseURL: "https://filesvuescollections.firebaseio.com",
-  projectId: "files-vues-collections",
-  storageBucket: "",
-  messagingSenderId: "218458213344",
-  appId: "1:218458213344:web:b6e1d08586ccd8867cf985",
+  apiKey: "AIzaSyCRPVkquOcYuJl8i2tU640ktywVNyyKV5c",
+  authDomain: "vuefilos-ebc8b.firebaseapp.com",
+  databaseURL: "https://vuefilos-ebc8b.firebaseio.com",
+  projectId: "vuefilos-ebc8b",
+  storageBucket: "vuefilos-ebc8b.appspot.com",
+  messagingSenderId: "399053134012",
+  appId: "1:399053134012:web:61de81c725aed3152f18b9"
 };
 
 firebase.initializeApp(config);

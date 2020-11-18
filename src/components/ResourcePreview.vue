@@ -25,7 +25,7 @@
         </nav>
         <nav class="level is-pulled-right">
           <div class="level-right">
-            <a href="#" class="level-item" aria-label="reply">{{ data.comment }} Comment</a>
+            <a href="#" class="level-item" aria-label="reply">{{ data.comments }} Comment</a>
             <a href="#" class="level-item">{{ data.votes }} Votes</a>
           </div>
         </nav>

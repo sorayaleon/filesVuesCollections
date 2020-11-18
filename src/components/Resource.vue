@@ -141,7 +141,7 @@
               name: this.profile.name,
             }). then( () => {
               fb.resourcesCollection.doc(this.id).update({
-                comment: this.resource.comment + 1,
+                comments: this.resource.comments + 1,
               }).then(() => {
                 this.messageSuccess = 'The comment has been successfully added.';
                 this.comment = '';
