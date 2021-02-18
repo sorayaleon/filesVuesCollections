@@ -36,3 +36,7 @@ npm run lint
 <p><img src="src/assets/capturas/ficha.png"/></p>
 
 <p><img src="src/assets/capturas/registro.png"/></p>
+
+## Despliegue
+
+Puedes ver el despliegue [aquí](https://vuefilos-ebc8b.web.app/)
